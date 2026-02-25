@@ -1,59 +1,61 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/SiratAlQuranLogo.png" width="150" alt="SiratAlQuran Logo">
 </p>
 
-## About Laravel
+<h1 align="center">SiratAlQuran</h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <strong>Quranic Guidance for Life's Struggles</strong>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<p align="center">
+  SiratAlQuran is a modern web and mobile platform designed to bridge the gap between human emotions and Divine guidance. Unlike traditional Quran apps that focus solely on reading, SiratAlQuran helps you find exactly where to start when life gets complex.
+</p>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🌟 Highlighted Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 🔍 Situation-Based Guidance
+Describe what you're going through in your own words—whether it's anxiety, grief, or confusion—and receive human-curated Quranic verses that speak directly to your situation.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 📚 Theme-Based Exploration
+Browse through a wide range of life themes, from "Patience in Hardship" to "Gratitude." Every theme is populated with representative verses and explanations to help you reflect.
 
-## Laravel Sponsors
+### 🌐 Hybrid Verse Discovery
+Every theme combines local, curated verses with real-time results from the `api.quran.com` external API, ensuring you always have a deep well of guidance to draw from.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### ✍️ Personal Journaling
+Record your personal reflections and thoughts on any verse. Keep your spiritual journey private and secure, with the ability to revisit your entries anytime.
 
-### Premium Partners
+### 📩 Direct Admin Contact
+A fully integrated contact system that allows users to send inquiries and feedback directly to the administration, with real-time email notifications.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 🛠️ Robust Admin Panel
+Comprehensive tools for administrators to manage themes, curated verses, and view user feedback, ensuring the platform stays relevant and accurate.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🚀 Tech Stack
 
-## Code of Conduct
+- **Backend:** Laravel 11 (Expressive PHP Framework)
+- **Frontend:** React with Tailwind CSS (Modern, Responsive UI)
+- **Mobile:** React Native / Expo (Cross-platform accessibility)
+- **Database:** MySQL
+- **APIs:** Integrated with `api.quran.com` for extensive search capabilities.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📖 Getting Started
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. **Clone the repository**
+2. **Install dependencies:** `composer install` & `npm install`
+3. **Configure Environment:** Copy `.env.example` to `.env` and set your database/mail credentials.
+4. **Run Migrations & Seeders:** `php artisan migrate --seed`
+5. **Start Development:** `php artisan serve` & `npm run dev`
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<p align="center">
+  © 2026 SiratAlQuran — صراط القرآن هو طريق النجاح
+</p>

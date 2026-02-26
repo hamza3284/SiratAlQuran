@@ -28,11 +28,11 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-[rgba(15,23,42,0.95)] border-b border-[var(--border)] backdrop-blur-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-8 lg:px-12 xl:px-16 h-20">
-        <Link to="/" className="flex items-center gap-3" onClick={closeMobileMenu}>
-          <div className="w-12 h-12 bg-[var(--primary)] rounded-lg flex items-center justify-center p-1">
+        <Link to="/" className="flex items-center gap-4" onClick={closeMobileMenu}>
+          <div className="w-14 h-14 bg-[var(--primary)] rounded-xl flex items-center justify-center p-1.5 shadow-lg shadow-[var(--primary)]/20">
             <img src="/SiratAlQuranLogo.png" alt="SiratAlQuran Logo" className="w-full h-full object-contain" />
           </div>
-          <span className="font-semibold text-lg">SiratAlQuran</span>
+          <span className="font-bold text-xl tracking-tight text-[var(--foreground)]">SiratAlQuran</span>
         </Link>
         
         {/* Desktop Navigation */}

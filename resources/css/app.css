@@ -5,11 +5,11 @@
 
 
 :root {
-  --bg-main: #0F172A;
-  --bg-card: #1F2937;
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
   --gold: #E6C77B;
-  --text-main: #FFFFFF;
-  --text-muted: #D1D5DB;
+  --text-main: var(--gold);
+  --text-muted: #B4934C;
   --border-soft: rgba(230, 199, 123, 0.25);
   --spacing: 0.25rem;
 

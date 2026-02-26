@@ -17,11 +17,11 @@ const BaseLayout = ({ children }) => {
       <footer className="border-t border-[var(--border)] mt-12">
         <div className="container mx-auto px-4 md:px-8 lg:px-12 xl:px-16 py-12 flex flex-col md:grid md:grid-cols-3 items-center gap-6 md:gap-0">
           <div className="flex items-center gap-4 text-[var(--muted-foreground)] font-semibold order-2 md:order-1 md:justify-self-start">
-            <div className="bg-[#111827] rounded-xl flex items-center gap-5 p-5 border border-gray-800 pr-10">
-              <div className="w-20 h-20 flex-shrink-0">
+            <div className="bg-[var(--card)] rounded-2xl flex items-center gap-6 p-6 border border-[var(--border)] pr-12 shadow-xl">
+              <div className="w-20 h-20 flex-shrink-0 bg-[var(--primary)] rounded-xl p-1.5 shadow-lg shadow-[var(--primary)]/10">
                 <img src="/SiratAlQuranLogo.png" alt="SiratAlQuran Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-3xl font-bold tracking-tight text-gray-200">SiratAlQuran</span>
+              <span className="text-3xl font-extrabold tracking-tight text-[var(--foreground)]">SiratAlQuran</span>
             </div>
           </div>
           <div className="flex gap-6 order-1 md:order-2 md:justify-self-center">

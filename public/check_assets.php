@@ -1,5 +1,11 @@
 <?php
 
+// Diagnostics expose server paths. Never serve them over HTTP.
+if (PHP_SAPI !== 'cli') {
+    http_response_code(404);
+    exit;
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -74,3 +80,4 @@ echo "<li>If files are <strong>MISSING</strong>: Re-upload the <code>build</code
 echo "<li>If files are <strong>FOUND</strong> but 'Try Open' fails: Fix permissions (755 for folders, 644 for files).</li>";
 echo "<li>If 'Try Open' shows Laravel 404 page: Your .htaccess is ignoring the file existence check.</li>";
 echo "</ol>";
+

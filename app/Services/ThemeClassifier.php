@@ -8,11 +8,11 @@ class ThemeClassifier
 {
     protected array $keywords = [
         'Anxiety / Fear' => [
-            'anxious', 'fear', 'scared', 'worry', 'panic', 'afraid', 'stress'
+            'anxiety', 'anxious', 'fear', 'scared', 'worry', 'panic', 'afraid', 'stress'
         ],
 
         'Patience in Hardship' => [
-            'hardship', 'pain', 'suffering', 'tired', 'exhausted', 'trial'
+            'patience', 'hardship', 'pain', 'suffering', 'tired', 'exhausted', 'trial'
         ],
 
         'Repentance' => [
@@ -20,7 +20,7 @@ class ThemeClassifier
         ],
 
         'Gratitude' => [
-            'thankful', 'grateful', 'blessing', 'appreciate'
+            'gratitude', 'thankful', 'grateful', 'blessing', 'appreciate'
         ],
 
         'Trust in Allah' => [
@@ -65,7 +65,7 @@ class ThemeClassifier
             $scores[$theme] = 0;
 
             foreach ($words as $word) {
-                if (str_contains($input, $word)) {
+                if (preg_match('/(?<![\\p{L}\\p{N}])' . preg_quote($word, '/') . '(?![\\p{L}\\p{N}])/iu', $input) === 1) {
                     $scores[$theme]++;
                 }
             }
@@ -77,15 +77,22 @@ class ThemeClassifier
             array_filter($scores, fn ($score) => $score > 0)
         );
 
-        // If no matches found, default to 'Hope'
         if (empty($matchedThemes)) {
-            $matchedThemes = ['Hope'];
+            return [];
         }
 
-        return Theme::whereIn('name', array_slice($matchedThemes, 0, 2))
-            ->with('ayats') // Eager load ayats
+        $matchedThemes = array_slice($matchedThemes, 0, 2);
+        $themes = Theme::whereIn('name', $matchedThemes)
+            ->with('ayats')
             ->get()
+            ->keyBy('name');
+
+        // WHERE IN does not preserve classifier relevance order.
+        return collect($matchedThemes)
+            ->map(fn ($name) => $themes->get($name))
+            ->filter()
             ->values()
             ->toArray();
     }
 }
+

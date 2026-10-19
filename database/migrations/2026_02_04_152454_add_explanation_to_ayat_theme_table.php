@@ -6,23 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('ayat_theme', function (Blueprint $table) {
-            $table->text('explanation')->nullable();
-        });
+        if (!Schema::hasColumn('ayat_theme', 'explanation')) {
+            Schema::table('ayat_theme', function (Blueprint $table) {
+                $table->text('explanation')->nullable();
+            });
+        }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('ayat_theme', function (Blueprint $table) {
-            $table->dropColumn('explanation');
-        });
+        // Keep migrated explanations; a rollback must not silently delete content.
     }
 };
+

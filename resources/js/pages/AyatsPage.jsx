@@ -10,7 +10,7 @@ export default function AyatsPage() {
   const [ayats, setAyats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [externalLoading, setExternalLoading] = useState(false);
-  const [externalPage, setExternalPage] = useState(1);
+  const [externalPage, setExternalPage] = useState(0);
   const [hasMoreExternal, setHasMoreExternal] = useState(true);
 
   // Fetch themes on mount
@@ -36,7 +36,7 @@ export default function AyatsPage() {
     if (!activeTheme) return;
 
     // Reset external pagination
-    setExternalPage(1);
+    setExternalPage(0);
     setHasMoreExternal(true);
 
     // Update URL
@@ -113,12 +113,14 @@ export default function AyatsPage() {
                       <span className="bg-[var(--primary)] text-[var(--primary-foreground)] text-xs px-2 py-1 rounded">
                         {ayat.surah}:{ayat.ayat}
                       </span>
-                      <Link 
+                      {ayat.is_external ? (
+                        <span className="text-xs text-[var(--muted-foreground)]">External search result</span>
+                      ) : <Link
                         to={`/ayats/${ayat.id}`}
                         className="text-[var(--muted-foreground)] hover:text-[var(--primary)] text-sm font-medium flex items-center gap-1 transition-colors"
                       >
                         <iconify-icon icon="lucide:pen-tool" width="14"></iconify-icon> Reflect
-                      </Link>
+                      </Link>}
                     </div>
                     
                     <p className="text-3xl text-right font-quran mb-6 leading-[2.5]" dir="rtl">

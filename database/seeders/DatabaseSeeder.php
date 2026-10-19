@@ -15,7 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        if (app()->environment('production')) {
+            throw new \RuntimeException('Demo database seeding is disabled in production.');
+        }
+
+        foreach (['users', 'themes', 'ayats', 'journal_entries'] as $table) {
+            if (\Illuminate\Support\Facades\DB::table($table)->exists()) {
+                throw new \RuntimeException('Demo database seeding requires an empty database.');
+            }
+        }
 
         User::factory()->create([
             'name' => 'Test User',
@@ -29,3 +37,4 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 }
+

@@ -2,28 +2,73 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        // Update ayats table
+        if (!Schema::hasTable('ayat_theme')) {
+            Schema::create('ayat_theme', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('ayat_id')->constrained()->cascadeOnDelete();
+                $table->foreignId('theme_id')->constrained()->cascadeOnDelete();
+                $table->text('explanation')->nullable();
+                $table->timestamps();
+            });
+        } elseif (!Schema::hasColumn('ayat_theme', 'explanation')) {
+            Schema::table('ayat_theme', function (Blueprint $table) {
+                $table->text('explanation')->nullable();
+            });
+        }
+
+        // Copy legacy links and explanations BEFORE dropping their source columns.
+        if (Schema::hasColumn('ayats', 'theme_id')) {
+            $hasExplanation = Schema::hasColumn('ayats', 'short_explanation');
+            $columns = $hasExplanation ? ['id', 'theme_id', 'short_explanation'] : ['id', 'theme_id'];
+
+            DB::table('ayats')->select($columns)->orderBy('id')
+                ->chunkById(100, function ($ayats) use ($hasExplanation) {
+                    foreach ($ayats as $ayat) {
+                        if ($ayat->theme_id === null) {
+                            if ($hasExplanation && !empty($ayat->short_explanation)) {
+                                throw new RuntimeException('A legacy explanation has no theme; migration stopped to preserve it.');
+                            }
+                            continue;
+                        }
+
+                        $link = DB::table('ayat_theme')
+                            ->where('ayat_id', $ayat->id)->where('theme_id', $ayat->theme_id);
+                        $existing = $link->first();
+                        $explanation = $hasExplanation ? $ayat->short_explanation : null;
+
+                        if ($existing === null) {
+                            DB::table('ayat_theme')->insert([
+                                'ayat_id' => $ayat->id,
+                                'theme_id' => $ayat->theme_id,
+                                'explanation' => $explanation,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        } elseif ($existing->explanation === null && $explanation !== null) {
+                            $link->update(['explanation' => $explanation, 'updated_at' => now()]);
+                        } elseif ($explanation !== null && $existing->explanation !== $explanation) {
+                            throw new RuntimeException('Conflicting legacy and pivot explanations require manual review.');
+                        }
+                    }
+                });
+        } elseif (Schema::hasColumn('ayats', 'short_explanation')
+            && DB::table('ayats')->whereNotNull('short_explanation')->where('short_explanation', '!=', '')->exists()) {
+            throw new RuntimeException('Legacy explanations cannot be mapped without theme_id; migration stopped.');
+        }
+
         Schema::table('ayats', function (Blueprint $table) {
-            if (Schema::hasColumn('ayats', 'surah_number')) {
-                $table->renameColumn('surah_number', 'surah');
-            }
-            if (Schema::hasColumn('ayats', 'ayah_number')) {
-                $table->renameColumn('ayah_number', 'ayah');
-            }
-            if (Schema::hasColumn('ayats', 'arabic_text')) {
-                $table->renameColumn('arabic_text', 'text_ar');
-            }
-            if (Schema::hasColumn('ayats', 'translation_text')) {
-                $table->renameColumn('translation_text', 'text_en');
+            foreach (['surah_number' => 'surah', 'ayah_number' => 'ayah',
+                'arabic_text' => 'text_ar', 'translation_text' => 'text_en'] as $from => $to) {
+                if (Schema::hasColumn('ayats', $from)) {
+                    $table->renameColumn($from, $to);
+                }
             }
             if (Schema::hasColumn('ayats', 'theme_id')) {
                 $table->dropForeign(['theme_id']);
@@ -33,44 +78,12 @@ return new class extends Migration
                 $table->dropColumn('short_explanation');
             }
         });
-
-        // Create pivot table
-        if (!Schema::hasTable('ayat_theme')) {
-            Schema::create('ayat_theme', function (Blueprint $table) {
-                $table->id();
-                $table->foreignId('ayat_id')->constrained()->cascadeOnDelete();
-                $table->foreignId('theme_id')->constrained()->cascadeOnDelete();
-                $table->timestamps();
-            });
-        }
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('ayat_theme');
-
-        Schema::table('ayats', function (Blueprint $table) {
-            if (!Schema::hasColumn('ayats', 'theme_id')) {
-                $table->foreignId('theme_id')->nullable()->constrained()->nullOnDelete();
-            }
-            if (!Schema::hasColumn('ayats', 'short_explanation')) {
-                $table->text('short_explanation')->nullable();
-            }
-            if (Schema::hasColumn('ayats', 'surah')) {
-                $table->renameColumn('surah', 'surah_number');
-            }
-            if (Schema::hasColumn('ayats', 'ayah')) {
-                $table->renameColumn('ayah', 'ayah_number');
-            }
-            if (Schema::hasColumn('ayats', 'text_ar')) {
-                $table->renameColumn('text_ar', 'arabic_text');
-            }
-            if (Schema::hasColumn('ayats', 'text_en')) {
-                $table->renameColumn('text_en', 'translation_text');
-            }
-        });
+        // A many-to-many mapping cannot be safely flattened to one theme/explanation.
+        throw new RuntimeException('This content migration is not safely reversible. Restore a verified backup instead.');
     }
 };
+

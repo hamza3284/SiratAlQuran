@@ -13,7 +13,7 @@ class ClassifierController extends Controller
     public function classify(Request $request, ThemeClassifier $classifier)
     {
         $validated = $request->validate([
-            'text' => 'required|string|min:3',
+            'text' => 'required|string|min:3|max:2000',
         ]);
 
         $themes = $classifier->classify($validated['text']);
@@ -23,3 +23,4 @@ class ClassifierController extends Controller
         ]);
     }
 }
+

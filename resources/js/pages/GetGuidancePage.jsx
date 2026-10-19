@@ -24,8 +24,8 @@ export default function GetGuidancePage() {
     if (!text.trim()) return;
     
     // Simple frontend validation
-    if (text.trim().length < 5) {
-      setError('Please enter at least 5 characters.');
+    if (text.trim().length < 3 || text.trim().length > 2000) {
+      setError('Please enter between 3 and 2,000 characters.');
       return;
     }
 
@@ -73,7 +73,8 @@ export default function GetGuidancePage() {
                     fetchGuidance();
                   }
                 }}
-                placeholder="What are you struggling with? (e.g., I feel overwhelmed by work, minimum 5 characters)"
+                maxLength={2000}
+                placeholder="What are you struggling with? (e.g., I feel overwhelmed by work)"
                 className={`w-full p-4 border rounded bg-[var(--input)] text-[var(--foreground)] h-32 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] ${error ? 'border-red-500' : 'border-[var(--border)]'}`}
             />
             
@@ -146,3 +147,4 @@ export default function GetGuidancePage() {
     </BaseLayout>
   );
 }
+

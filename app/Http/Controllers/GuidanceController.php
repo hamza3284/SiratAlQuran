@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\ThemeClassifier;
+use App\Services\VerseText;
 use App\Models\Ayat;
-use Illuminate\Support\Facades\Http;
 
 class GuidanceController extends Controller
 {
-    public function getGuidance(Request $request, ThemeClassifier $classifier)
+    public function getGuidance(Request $request, ThemeClassifier $classifier, VerseText $verseText)
     {
-        $request->validate([
-            'text' => 'required|string|min:5',
+        $validated = $request->validate([
+            'text' => 'required|string|min:3|max:2000',
         ]);
 
-        $themes = collect($classifier->classify($request->text));
+        $themes = collect($classifier->classify($validated['text']));
 
         if ($themes->isEmpty()) {
             return response()->json([
-                'message' => 'No matching theme found'
+                'message' => 'No matching theme found. Please choose a theme or describe your situation differently.',
             ], 422);
         }
 
@@ -28,34 +28,24 @@ class GuidanceController extends Controller
         $ayats = Ayat::whereHas('themes', function ($query) use ($primaryTheme) {
                 $query->where('themes.id', $primaryTheme['id']);
             })
-            ->inRandomOrder()
+            ->orderBy('surah')
+            ->orderBy('ayat')
+            ->orderBy('id')
             ->limit(5)
             ->get();
 
-        $ayats = $ayats->map(function (Ayat $ayat) {
-            $key = $ayat->surah . ':' . $ayat->ayat;
+        if ($ayats->isEmpty()) {
+            return response()->json([
+                'message' => 'No stored verses are available for the matched theme.',
+            ], 422);
+        }
 
-            try {
-                $ar = Http::timeout(10)->get("https://api.alquran.cloud/v1/ayah/{$key}/quran-uthmani");
-                $en = Http::timeout(10)->get("https://api.alquran.cloud/v1/ayah/{$key}/en.sahih");
-
-                if ($ar->ok()) {
-                    $arText = data_get($ar->json(), 'data.text');
-                    if ($arText) {
-                        $ayat->text_ar = $arText;
-                    }
-                }
-
-                if ($en->ok()) {
-                    $enText = data_get($en->json(), 'data.text');
-                    if ($enText) {
-                        $ayat->text_en = $enText;
-                    }
-                }
-            } catch (\Throwable $e) {
+        $ayats->each(function (Ayat $ayat) use ($verseText) {
+            $text = $verseText->forReference($ayat->surah, $ayat->ayat);
+            if ($text !== null) {
+                $ayat->text_ar = $text['text_ar'];
+                $ayat->text_en = $text['text_en'];
             }
-
-            return $ayat;
         });
 
         return response()->json([
@@ -65,3 +55,4 @@ class GuidanceController extends Controller
         ]);
     }
 }
+

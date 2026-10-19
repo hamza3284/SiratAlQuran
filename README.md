@@ -38,7 +38,7 @@ Comprehensive tools for administrators to manage themes, curated verses, and vie
 
 ## 🚀 Tech Stack
 
-- **Backend:** Laravel 11 (Expressive PHP Framework)
+- **Backend:** Laravel 12 (Expressive PHP Framework)
 - **Frontend:** React with Tailwind CSS (Modern, Responsive UI)
 - **Mobile:** React Native / Expo (Cross-platform accessibility)
 - **Database:** MySQL
@@ -51,11 +51,14 @@ Comprehensive tools for administrators to manage themes, curated verses, and vie
 1. **Clone the repository**
 2. **Install dependencies:** `composer install` & `npm install`
 3. **Configure Environment:** Copy `.env.example` to `.env` and set your database/mail credentials.
-4. **Run Migrations & Seeders:** `php artisan migrate --seed`
+4. **Database:** Run `php artisan migrate`. Demo seeding is only for a new, empty local database; it is blocked in production and populated databases.
 5. **Start Development:** `php artisan serve` & `npm run dev`
+
+Before deploying the basic reliability repairs, follow [the validation and deployment notes](docs/basic-repair-validation.md).
 
 ---
 
 <p align="center">
   © 2026 SiratAlQuran — صراط القرآن هو طريق النجاح
 </p>
+

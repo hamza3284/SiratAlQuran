@@ -33,10 +33,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    if (token) await logoutUser(token);
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
+    try {
+      if (token) await logoutUser(token);
+    } catch {
+      // The server may be unavailable; still end the browser's local session.
+    } finally {
+      setAuthToken(null);
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem('token');
+    }
   };
   
 
@@ -48,3 +54,4 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+

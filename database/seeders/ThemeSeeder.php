@@ -26,8 +26,9 @@ class ThemeSeeder extends Seeder
 
 
         foreach ($themes as $name) {
-            Theme::create([
+            Theme::firstOrCreate([
                 'name' => $name,
+            ], [
                 'slug' => str()->slug($name),
             ]);
         }
